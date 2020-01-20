@@ -2,18 +2,13 @@ from globalobjects import obj_Board as board
 
 
 class entity():
-    def __init__(self, x, y, lent, wid):
+    def __init__(self, x, y):
         self._x = x
         self._y = y
-        self._len = lent
-        self._wid = wid
         self._mat = None
 
     def retPos(self):
         return (self._x, self._y)
-
-    def retDim(self):
-        return(self.len, self.wid)
 
     def retMat(self):
         return self._mat
@@ -34,23 +29,7 @@ class entity():
             self.putOnBoard(self._mat, "put")
 
     def moveRight(self, y):
-        if (self._y + y < board._columns//2):
+        if (self._y + y < board._columns):
             self.putOnBoard(self._mat, )
             self._y = self._y + y
             self.putOnBoard(self._mat, "put")
-
-    def gravity(self, g_timer):
-        if g_timer < 6:
-            if g_timer % 6 == 0:
-                self._x = self._x + 1
-
-        elif g_timer < 12:
-            if g_timer % 3 == 0:
-                self._x = self._x + 1
-
-        elif g_timer < 18:
-            if g_timer % 1 == 0:
-                self._x = self._x + 1
-
-        else:
-            self._x = self._x + 1

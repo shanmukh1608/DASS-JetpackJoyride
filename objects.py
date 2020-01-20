@@ -1,21 +1,19 @@
 from entity import entity
+import random
 
 class coins(entity):
-	def __init__(self, x, y, lent, wid):
-		super().__init__(x, y, lent, wid)
+	def __init__(self, x, y):
+		super().__init__(x, y)
 		self._mat = ["O"]
 
-class laser1(entity):
-	def __init__(self, x, y, lent, wid):
-		super().__init__(x, y, lent, wid)
-		self._mat = ['|', '|', '|', '|']
+class lasers(entity):
+	def __init__(self, x, y):
+		super().__init__(x, y)
+		self._orientation = random.randint(0, 2)
 
-class laser2(entity):
-	def __init__(self, x, y, lent, wid):
-		super().__init__(x, y, lent, wid)
-		self._mat = ['----']\
-
-class laser3(entity):
-	def __init__(self, x, y, lent, wid):
-		super().__init__(x, y, lent, wid)
-		self._mat = ['\\', ' \\', '  \\', '   \\']
+		if (self._orientation == 0):
+			self._mat = ['|', '|', '|', '|']
+		elif (self._orientation == 1):
+			self._mat = ['----']
+		else:
+			self._mat = ['\\', ' \\', '  \\', '   \\']
