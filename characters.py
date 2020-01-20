@@ -6,11 +6,11 @@ class mando(entity):
 	def __init__(self, x, y):
 		super().__init__(x, y)
 		self._mat = \
-   ['    __.-._   ', 
-		'    \'-._"7\'  ', 
-		"     /'.-c   ", 
-		'     |  /T   ', 
-		'    _)_/LI   ']
+   		['__.-._ ', 
+		'\'-._"7\'', 
+		" /'.-c ", 
+		' |  /T ', 
+		'_)_/LI ']
 
 	def moveUp(self, x):
 		if self._x - x > 1:

@@ -1,5 +1,9 @@
 from globalobjects import obj_Board as board
 
+class point: 
+    def __init__(self, x, y): 
+        self._x = x 
+        self._y = y 
 
 class entity():
     def __init__(self, x, y):

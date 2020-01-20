@@ -17,6 +17,7 @@ class board:
 			for j in range(self._columns):
 				self.new.append(" ")
 			self._matrix.append(self.new)
+
 	
 	def printboard(self):
 		for i in range(self._rows):
