@@ -25,3 +25,10 @@ class lasers(entity):
 			self._mat = ['\\', ' \\', '  \\', '   \\']
 			self._len = 3
 			self._width = 4
+
+class speedup(entity):
+	def __init__(self, x, y):
+		super().__init__(x, y)
+		self._len = 2
+		self._width = 2
+		self._mat = ['PP', 'PP']

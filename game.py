@@ -8,7 +8,7 @@ import cursor
 
 from characters import mando
 from entity import point
-from objects import coins, lasers
+from objects import coins, lasers, speedup
 import globalobjects
 from globalobjects import obj_Board as board
 
@@ -33,6 +33,9 @@ def checkCollision(obj1, obj2):
 startTime = time.time()
 lastCoinTime = time.time()
 lastLaserTime = time.time()
+lastPowerUpTime = time.time() #last time of collection
+lastSpeedUpTime = time.time() #last time of activation
+
 g_timer = 0
 tick = 0
 
@@ -42,6 +45,9 @@ coinCount = 0
 laserList = []
 laserCount = 0
 
+powerUpList = []
+powerUpCount = 0
+
 mando = mando(board._rows-7, 1)
 kb = hack.KBHit()
 
@@ -49,31 +55,37 @@ kb = hack.KBHit()
 while (globalobjects.lives > 0 and globalobjects.gameOver == True):
 	mando.updateBoard(mando._mat, flag="put")
 
-	# mando.gravity(g_timer)
-	if (tick % 2 == 0):
-		mando.moveDown(1)
-	# g_timer = g_timer + 1
+	mando.gravity()
 
-	# if (mando.retPos()[0] == board._rows - 7): # if touches ground
-		# g_timer = 0
+	if (time.time() - lastSpeedUpTime >= 10):
+		globalobjects.speedup = False
+
+	if (mando.retPos()[0] == board._rows - 1): # if touches ground
+		globalobjects.g_timer = time.time()
 		
 	if (time.time() - lastCoinTime > 2):
-		coinsList.append(coins(random.randint(2, board._rows - 3), board._columns - 1))
+		coinsList.append(coins(random.randint(3, board._rows - 3), board._columns - 1))
 		coinsList[coinCount].updateBoard(coinsList[coinCount].retMat(), flag="put")
 		coinCount = coinCount + 1
 		lastCoinTime = time.time()
 
 	if (time.time() - lastLaserTime > 2):
-		laserList.append(lasers(random.randint(2, board._rows - 7), board._columns - 6))
+		laserList.append(lasers(random.randint(3, board._rows - 7), board._columns - 6))
 		laserList[laserCount].updateBoard(laserList[laserCount].retMat(), flag="put")
 		laserCount = laserCount + 1
 		lastLaserTime = time.time()
+
+	if (time.time() - lastPowerUpTime > 10):
+		powerUpList.append(speedup(random.randint(3, board._rows - 7), board._columns - 6))
+		powerUpList[powerUpCount].updateBoard(powerUpList[powerUpCount].retMat(), flag="put")
+		powerUpCount = powerUpCount + 1
+		lastPowerUpTime = time.time()
 
 	for i in range(len(coinsList)):
 
 		try:
 			if (tick % 3 == 0):
-				coinsList[i].moveLeft(1)
+				coinsList[i].moveLeft(1 if globalobjects.speedup == False else 2)
 		except:
 			pass
 
@@ -87,7 +99,7 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == True):
 			pass
 			
 		try:
-			if (coinsList[i].retPos()[1] == 1):
+			if (coinsList[i].retPos()[1] < 4):
 				coinsList[i].updateBoard(coinsList[i].retMat(), )
 				del(coinsList[i])
 				coinCount = coinCount - 1
@@ -98,7 +110,7 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == True):
 		
 		try:
 			if (tick % 3 == 0):
-				laserList[i].moveLeft(1)
+				laserList[i].moveLeft(1 if globalobjects.speedup == False else 2)
 		except:
 			pass
 
@@ -112,24 +124,49 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == True):
 			pass
 
 		try:
-			if (laserList[i].retPos()[1] == 1):
+			if (laserList[i].retPos()[1] < 4):
 				laserList[i].updateBoard(laserList[i].retMat(), )
 				del(laserList[i])
 				laserCount = laserCount - 1
 		except:
 			pass
 
+	for i in range(len(powerUpList)):
+		try:
+			if (tick % 3 == 0):
+				powerUpList[i].moveLeft(1 if globalobjects.speedup == False else 2)
+		except:
+			pass
+			
+		try:
+			if (checkCollision(powerUpList[i], mando) == 1):
+				globalobjects.speedup = True
+				lastSpeedUpTime = time.time()
+				powerUpList[i].updateBoard(powerUpList[i].retMat(), )
+				del(powerUpList[i])
+				powerUpCount = powerUpCount - 1
+		except:
+			pass
 
+		try:
+			if (powerUpList[i].retPos()[1] < 4):
+				powerUpList[i].updateBoard(powerUpList[i].retMat(), )
+				del(powerUpList[i])
+				powerUpCount = powerUpCount - 1
+		except:
+			pass
+		
 	text="f"
 	if kb.kbhit():
 		text = kb.getch()
 	
 	if text == "w":
 		mando.moveUp(5)
+		globalobjects.g_timer = time.time()
 	if text == "d":
-		mando.moveRight(1)
+		mando.moveRight(1 if globalobjects.speedup == False else 2)
 	if text == "a":
-		mando.moveLeft(1)
+		mando.moveLeft(1 if globalobjects.speedup == False else 2)
 
 	board.printboard()
 

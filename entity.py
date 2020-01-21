@@ -24,7 +24,7 @@ class entity():
         return (self._len, self._width)
     
     def updateBoard(self, mat, flag="empty"):
-        text = " Score: " + str(globalobjects.score) + " || Lives: " + str(globalobjects.lives) + " || Shield: " + ("Ready" if globalobjects.shield == 1 else "Not Ready") + (" || Time Left: " + str(globalobjects.timeleft) if globalobjects.timeleft > 0 else " || Boss Fight!")
+        text = " Score: " + str(globalobjects.score) + " || Lives: " + str(globalobjects.lives) + " || Shield: " + ("Ready" if globalobjects.shield == True else "Not Ready") + (" || Time Left: " + str(globalobjects.timeleft) if globalobjects.timeleft > 0 else " || Boss Fight!")
         board._matrix[1] = [i for i in (text + (board._columns - len(text))*" ")]
         for i in range(len(mat)):
             for j in range(len(mat[i])):

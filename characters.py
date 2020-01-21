@@ -1,4 +1,6 @@
 from entity import entity
+import time
+import globalobjects
 from globalobjects import obj_Board as board
 
 class mando(entity):
@@ -27,8 +29,12 @@ class mando(entity):
 			self._x = self._x + x
 			self.updateBoard(self._mat, "put")
 
-	def gravity(self, g_timer):
+	def gravity(self):
+		# displacement = (2*int(globalobjects.g_timer-time.time()) + 1)
+		# self.moveDown(displacement)
 		self.moveDown(1)
+		# print(displacement)
+
 		# if (g_timer < 3):
 			# self.moveDown(g_timer)
 		# else:

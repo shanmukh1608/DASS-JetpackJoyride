@@ -16,5 +16,7 @@ obj_scenery.create_sky(obj_Board)
 lives = 3
 score = 0
 timeleft = 1
-shield = 1
+shield = False
+speedup = False
 gameOver = True
+g_timer = 0
