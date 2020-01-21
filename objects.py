@@ -6,7 +6,7 @@ class coins(entity):
 		super().__init__(x, y)
 		self._len = 0
 		self._width = 0
-		self._mat = ["O"]
+		self._mat = ["©"]
 
 class lasers(entity):
 	def __init__(self, x, y):

@@ -12,17 +12,20 @@ class mando(entity):
 		' |  /T ', 
 		'_)_/LI ']
 
+		self._len = 6
+		self._width = 4
+
 	def moveUp(self, x):
-		if self._x - x > 1:
-		   self.putOnBoard(self._mat, )
+		if self._x - x > 2:
+		   self.updateBoard(self._mat, )
 		   self._x = self._x - x
-		   self.putOnBoard(self._mat, "put")
+		   self.updateBoard(self._mat, "put")
 
 	def moveDown(self, x):
 		if self._x + x < board._rows - 6:
-			self.putOnBoard(self._mat, )
+			self.updateBoard(self._mat, )
 			self._x = self._x + x
-			self.putOnBoard(self._mat, "put")
+			self.updateBoard(self._mat, "put")
 
 	def gravity(self, g_timer):
 		self.moveDown(1)

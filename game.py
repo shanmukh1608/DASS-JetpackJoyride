@@ -9,10 +9,26 @@ import cursor
 from characters import mando
 from entity import point
 from objects import coins, lasers
+import globalobjects
 from globalobjects import obj_Board as board
 
 os.system('clear')
 cursor.hide()
+
+def checkCollision(obj1, obj2):
+	l1 = point(obj1.retPos()[1], obj1.retPos()[0])
+	r1 = point(obj1.retPos()[1] + obj1.retDim()[1], obj1.retPos()[0] + obj1.retDim()[0])
+
+	l2 = point(obj2.retPos()[1], obj2.retPos()[0])
+	r2 = point(obj2.retPos()[1] + obj2.retDim()[1], obj2.retPos()[0] + obj2.retDim()[0])
+
+	if(l1._x > r2._x or l2._x > r1._x): 
+		return 0
+
+	if(l1._y > r2._y or l2._y > r1._y): 
+		return 0
+	
+	return 1
 
 startTime = time.time()
 lastCoinTime = time.time()
@@ -30,8 +46,8 @@ mando = mando(board._rows-7, 1)
 kb = hack.KBHit()
 
 
-while (1):
-	mando.putOnBoard(mando._mat, flag="put")
+while (globalobjects.lives > 0 and globalobjects.gameOver == True):
+	mando.updateBoard(mando._mat, flag="put")
 
 	# mando.gravity(g_timer)
 	if (tick % 2 == 0):
@@ -43,13 +59,13 @@ while (1):
 		
 	if (time.time() - lastCoinTime > 2):
 		coinsList.append(coins(random.randint(2, board._rows - 3), board._columns - 1))
-		coinsList[coinCount].putOnBoard(coinsList[coinCount].retMat(), flag="put")
+		coinsList[coinCount].updateBoard(coinsList[coinCount].retMat(), flag="put")
 		coinCount = coinCount + 1
 		lastCoinTime = time.time()
 
 	if (time.time() - lastLaserTime > 2):
 		laserList.append(lasers(random.randint(2, board._rows - 7), board._columns - 6))
-		laserList[laserCount].putOnBoard(laserList[laserCount].retMat(), flag="put")
+		laserList[laserCount].updateBoard(laserList[laserCount].retMat(), flag="put")
 		laserCount = laserCount + 1
 		lastLaserTime = time.time()
 
@@ -62,31 +78,17 @@ while (1):
 			pass
 
 		try:
-			l1 = point(coinsList[i].retPos()[1], coinsList[i].retPos()[0])
-			r1 = point(coinsList[i].retPos()[1], coinsList[i].retPos()[0])
-
-			l2 = point(mando.retPos()[1], mando.retPos()[0])
-			r2 = point(mando.retPos()[1] + 6, mando.retPos()[0] + 4)
-			
-			val = 1
-
-			if(l1._x > r2._x or l2._x > r1._x): 
-				val = 0
-  
-			if(l1._y > r2._y or l2._y > r1._y): 
-				val = 0
-			
-			if val == 1:
-				coinsList[i].putOnBoard(coinsList[i].retMat(), )
+			if (checkCollision(coinsList[i], mando) == 1):
+				globalobjects.score = globalobjects.score + 1
+				coinsList[i].updateBoard(coinsList[i].retMat(), )
 				del(coinsList[i])
 				coinCount = coinCount - 1
 		except:
 			pass
-
-		
+			
 		try:
 			if (coinsList[i].retPos()[1] == 1):
-				coinsList[i].putOnBoard(coinsList[i].retMat(), )
+				coinsList[i].updateBoard(coinsList[i].retMat(), )
 				del(coinsList[i])
 				coinCount = coinCount - 1
 		except:
@@ -95,48 +97,28 @@ while (1):
 	for i in range(len(laserList)):
 		
 		try:
-			l1 = point(laserList[i].retPos()[1], laserList[i].retPos()[0])
-			r1 = point(laserList[i].retPos()[1] + laserlist[i]._width, laserList[i].retPos()[0] + laserlist[i]._len)
-
-			l2 = point(mando.retPos()[1], mando.retPos()[0])
-			r2 = point(mando.retPos()[1] + 6, mando.retPos()[0] + 4)
-			
-			val = 1
-
-			if(l1._x > r2._x or l2._x > r1._x): 
-				val = 0
-  
-			if(l1._y > r2._y or l2._y > r1._y): 
-				val = 0
-			
-			if (val == 1):
-				print(val)
-			# print(l1._x - r2._x)
-			# print(l1._y - r2._y)
-			# print(l2._x - r1._x)
-			# print(l2._y - r1._y)
-			# print(val)
-				# laserList[i].putOnBoard(laserList[i].retMat(), )
-				# del(laserList[i])
-				# coinCount = coinCount - 1
-		except:
-			pass
-
-		try:
 			if (tick % 3 == 0):
 				laserList[i].moveLeft(1)
 		except:
 			pass
 
 		try:
-			if (laserList[i].retPos()[1] == 1):
-				laserList[i].putOnBoard(laserList[i].retMat(), )
+			if (checkCollision(laserList[i], mando) == 1):
+				globalobjects.lives = globalobjects.lives - 1
+				laserList[i].updateBoard(laserList[i].retMat(), )
 				del(laserList[i])
 				laserCount = laserCount - 1
 		except:
 			pass
 
-		
+		try:
+			if (laserList[i].retPos()[1] == 1):
+				laserList[i].updateBoard(laserList[i].retMat(), )
+				del(laserList[i])
+				laserCount = laserCount - 1
+		except:
+			pass
+
 
 	text="f"
 	if kb.kbhit():

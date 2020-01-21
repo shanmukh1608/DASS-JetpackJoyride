@@ -13,3 +13,8 @@ obj_scenery = Scenery()
 obj_scenery.create_ground(obj_Board)
 obj_scenery.create_sky(obj_Board)
 
+lives = 3
+score = 0
+timeleft = 1
+shield = 1
+gameOver = True
