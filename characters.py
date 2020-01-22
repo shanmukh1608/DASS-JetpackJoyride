@@ -76,9 +76,9 @@ class mando(entity):
 				self.updateBoard(self._shieldMat, "put")
 
 	def gravity(self):
-		# displacement = (2*int(globalobjects.g_timer-time.time()) + 1)
-		# self.moveDown(displacement)
-		self.moveDown(1)
+		displacement = (min(10, 2*int(time.time()-globalobjects.g_timer) + 1))
+		self.moveDown(displacement)
+		# self.moveDown(1)
 		# print(displacement)
 
 		# if (g_timer < 3):
@@ -109,8 +109,8 @@ class dragon(entity):
 
 	def setX(self, x):
 		self._x = x
-		if (self._x <= 4):
-			self._x = 4
+		if (self._x <= 5):
+			self._x = 6
 		if ( x >= board._rows - 14):
 			x = board._rows - 14
 

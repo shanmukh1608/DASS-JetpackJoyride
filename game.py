@@ -62,19 +62,19 @@ magnetCreated = False
 mando = mando(board._rows-7, 1)
 kb = hack.KBHit()
 
-
-
 while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 	
-	globalobjects.timeleft = int(3 - time.time() + startTime)
+	globalobjects.timeleft = int(90 - time.time() + startTime)
 	
-	if (globalobjects.shieldActive == True):
-		mando.updateBoard(mando._shieldMat, flag="put")
-		# mando._width = 6
-	else:
-		mando.updateBoard(mando._mat, flag="put")
+	if (mando.retPos()[0] == board._rows - 7): # if touches ground
+		globalobjects.g_timer = time.time()
 
 	mando.gravity()
+
+	if (globalobjects.shieldActive == True):
+		mando.updateBoard(mando._shieldMat, flag="put")
+	else:
+		mando.updateBoard(mando._mat, flag="put")
 
 	if (time.time() - startTime >= random.randint(10, 15)):
 		if (magnetCreated is False):
@@ -84,7 +84,6 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 
 	if (time.time() - lastShieldTime >= 10):
 		globalobjects.shieldActive = False
-		# mando._width = 4
 
 	if (time.time() - lastShieldTime >= 70):
 		globalobjects.shieldAvailable = True
@@ -92,7 +91,7 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 	if (time.time() - lastSpeedUpTime >= 10):
 		globalobjects.speedup = False
 
-	if (mando.retPos()[0] == board._rows - 1): # if touches ground
+	if (mando.retPos()[0] == board._rows - 7): # if touches ground
 		globalobjects.g_timer = time.time()
 
 	if globalobjects.timeleft > 0:	
@@ -246,10 +245,14 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 
 	if globalobjects.timeleft <= 0:
 		if 'enemy' not in locals():
-			enemy = dragon(mando.retPos()[1] - 15, board._columns - 25)
+			enemy = dragon(10, board._columns - 25)
 		
+		enemy.updateBoard(enemy.retMat(), )
+		enemy.setX(max(8, mando.retPos()[0]) - 8)
+		enemy.updateBoard(enemy.retMat(), flag="put")
+
 		if (time.time() - lastSnowballTime >= 0.5):
-			snowballList.append(snowballs(enemy.retPos()[0] + 9, enemy.retPos()[1] - 4))
+			snowballList.append(snowballs(enemy.retPos()[0]+10, enemy.retPos()[1]))
 			snowballList[snowballCount].updateBoard(snowballList[snowballCount].retMat(), flag = "put")
 			snowballCount = snowballCount + 1
 			lastSnowballTime = time.time()
@@ -277,11 +280,6 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 					snowballCount = snowballCount - 1
 			except:
 				pass
-
-
-		enemy.updateBoard(enemy.retMat() )
-		enemy.setX(mando.retPos()[0] - 8)
-		enemy.updateBoard(enemy.retMat(), flag="put")
 
 	text="x"
 	if kb.kbhit():
