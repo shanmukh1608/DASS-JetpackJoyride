@@ -40,6 +40,8 @@ class board:
 					print('%s%s%s%s' % (pos(j, i), Back.BLACK,Fore.BLUE, self._matrix[i][j]), end='')
 				elif self._matrix[i][j] == "O":
 					print('%s%s%s%s' % (pos(j, i), Back.BLACK,Fore.RED, self._matrix[i][j]), end='')
+				elif self._matrix[i][j] == "S":
+					print('%s%s%s%s' % (pos(j, i), Back.BLACK,Fore.BLUE, self._matrix[i][j]), end='')
 				elif self._matrix[i][j] == "@":
 					print('%s%s%s%s%s' % (pos(j, i), Back.BLACK,Fore.WHITE,Style.BRIGHT, self._matrix[i][j]), end='')
 				else:
