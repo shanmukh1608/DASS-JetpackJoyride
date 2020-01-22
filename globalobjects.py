@@ -20,4 +20,5 @@ shieldAvailable = True
 shieldActive = False
 speedup = False
 gameOver = False
+magnetActive = False
 g_timer = 0

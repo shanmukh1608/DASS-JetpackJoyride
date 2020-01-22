@@ -8,7 +8,7 @@ import cursor
 
 from characters import mando
 from entity import point
-from objects import coins, lasers, bullets, speedup
+from objects import coins, lasers, bullets, speedup, magnets
 import globalobjects
 from globalobjects import obj_Board as board
 
@@ -52,6 +52,8 @@ powerUpCount = 0
 bulletList = []
 bulletCount = 0
 
+magnetCreated = False
+
 mando = mando(board._rows-7, 1)
 kb = hack.KBHit()
 
@@ -66,6 +68,11 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 
 	mando.gravity()
 
+	if (time.time() - startTime >= random.randint(10, 30)):
+		if (magnetCreated is False):
+			magnet = magnets(25, board._columns - 10)
+			magnet.updateBoard(magnet.retMat(), flag="put")
+			magnetCreated = True
 
 	if (time.time() - lastShieldTime >= 10):
 		globalobjects.shieldActive = False
@@ -81,7 +88,7 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 		globalobjects.g_timer = time.time()
 		
 	if (time.time() - lastCoinTime > 2):
-		coinsList.append(coins(random.randint(3, board._rows - 3), board._columns - 1))
+		coinsList.append(coins(random.randint(3, board._rows - 4), board._columns - 3))
 		coinsList[coinCount].updateBoard(coinsList[coinCount].retMat(), flag="put")
 		coinCount = coinCount + 1
 		lastCoinTime = time.time()
@@ -97,6 +104,15 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 		powerUpList[powerUpCount].updateBoard(powerUpList[powerUpCount].retMat(), flag="put")
 		powerUpCount = powerUpCount + 1
 		lastPowerUpTime = time.time()
+
+	try:
+		if (tick % 5 == 0):
+			magnet.moveLeft(1)
+			if (magnet.retPos()[1] < 4):
+				magnet.updateBoard(magnet.retMat(), )
+				del(magnet)
+	except:
+		pass
 
 	for i in range(len(bulletList)):
 		try:
@@ -198,6 +214,13 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 		except:
 			pass
 		
+	if 'magnet' in locals():
+		if tick % 2 == 0:
+			if magnet.retPos()[1] < mando.retPos()[1]:
+				mando.moveLeft(1)
+			elif magnet.retPos()[1] > mando.retPos()[1]:
+				mando.moveRight(1)
+
 	text="x"
 	if kb.kbhit():
 		text = kb.getch()
@@ -205,15 +228,18 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 	if text == "w":
 		mando.moveUp(5)
 		globalobjects.g_timer = time.time()
+
 	if text == "d":
-		mando.moveRight(1 if globalobjects.speedup == False else 2)
+		mando.moveRight(2 if globalobjects.speedup == False else 2*2)
 	if text == "a":
-		mando.moveLeft(1 if globalobjects.speedup == False else 2)
+		mando.moveLeft(2 if globalobjects.speedup == False else 2*2)
+
 	if text == " ":
 		if globalobjects.shieldAvailable is True:
 			globalobjects.shieldActive = True
 			globalobjects.shieldAvailable = False
 			lastShieldTime = time.time()
+
 	if text == "f":
 		bulletList.append(bullets(mando.retPos()[0]+2, mando.retPos()[1]+7))
 		bulletList[bulletCount].updateBoard(bulletList[bulletCount].retMat(), flag="put")
