@@ -6,9 +6,9 @@ import readInput as hack
 import random   
 import cursor
 
-from characters import mando
+from characters import mando, dragon
 from entity import point
-from objects import coins, lasers, bullets, speedup, magnets
+from objects import coins, lasers, bullets, speedup, magnets, snowballs
 import globalobjects
 from globalobjects import obj_Board as board
 
@@ -35,6 +35,8 @@ lastCoinTime = time.time()
 lastLaserTime = time.time()
 lastPowerUpTime = time.time() #last time of collection
 lastSpeedUpTime = time.time() #last time of activation
+lastSnowballTime = time.time()
+
 lastShieldTime = time.time()
 
 g_timer = 0
@@ -52,14 +54,20 @@ powerUpCount = 0
 bulletList = []
 bulletCount = 0
 
+snowballList = []
+snowballCount = 0
+
 magnetCreated = False
 
 mando = mando(board._rows-7, 1)
 kb = hack.KBHit()
 
 
-while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 
+while (globalobjects.lives > 0 and globalobjects.gameOver == False):
+	
+	globalobjects.timeleft = int(3 - time.time() + startTime)
+	
 	if (globalobjects.shieldActive == True):
 		mando.updateBoard(mando._shieldMat, flag="put")
 		# mando._width = 6
@@ -68,7 +76,7 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 
 	mando.gravity()
 
-	if (time.time() - startTime >= random.randint(10, 30)):
+	if (time.time() - startTime >= random.randint(10, 15)):
 		if (magnetCreated is False):
 			magnet = magnets(25, board._columns - 10)
 			magnet.updateBoard(magnet.retMat(), flag="put")
@@ -78,7 +86,7 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 		globalobjects.shieldActive = False
 		# mando._width = 4
 
-	if (time.time() - lastShieldTime >= 20):
+	if (time.time() - lastShieldTime >= 70):
 		globalobjects.shieldAvailable = True
 	
 	if (time.time() - lastSpeedUpTime >= 10):
@@ -86,24 +94,25 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 
 	if (mando.retPos()[0] == board._rows - 1): # if touches ground
 		globalobjects.g_timer = time.time()
-		
-	if (time.time() - lastCoinTime > 2):
-		coinsList.append(coins(random.randint(3, board._rows - 4), board._columns - 3))
-		coinsList[coinCount].updateBoard(coinsList[coinCount].retMat(), flag="put")
-		coinCount = coinCount + 1
-		lastCoinTime = time.time()
 
-	if (time.time() - lastLaserTime > 2):
-		laserList.append(lasers(random.randint(3, board._rows - 8), board._columns - 7))
-		laserList[laserCount].updateBoard(laserList[laserCount].retMat(), flag="put")
-		laserCount = laserCount + 1
-		lastLaserTime = time.time()
-
-	if (time.time() - lastPowerUpTime > 10):
-		powerUpList.append(speedup(random.randint(3, board._rows - 7), board._columns - 6))
-		powerUpList[powerUpCount].updateBoard(powerUpList[powerUpCount].retMat(), flag="put")
-		powerUpCount = powerUpCount + 1
-		lastPowerUpTime = time.time()
+	if globalobjects.timeleft > 0:	
+		if (time.time() - lastCoinTime > 2):
+			coinsList.append(coins(random.randint(3, board._rows - 4), board._columns - 3))
+			coinsList[coinCount].updateBoard(coinsList[coinCount].retMat(), flag="put")
+			coinCount = coinCount + 1
+			lastCoinTime = time.time()
+	
+		if (time.time() - lastLaserTime > 2):
+			laserList.append(lasers(random.randint(3, board._rows - 8), board._columns - 7))
+			laserList[laserCount].updateBoard(laserList[laserCount].retMat(), flag="put")
+			laserCount = laserCount + 1
+			lastLaserTime = time.time()
+	
+		if (time.time() - lastPowerUpTime > 10):
+			powerUpList.append(speedup(random.randint(3, board._rows - 7), board._columns - 6))
+			powerUpList[powerUpCount].updateBoard(powerUpList[powerUpCount].retMat(), flag="put")
+			powerUpCount = powerUpCount + 1
+			lastPowerUpTime = time.time()
 
 	try:
 		if (tick % 5 == 0):
@@ -126,7 +135,21 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 				if (checkCollision(laserList[j], bulletList[i]) == 1):
 					laserList[j].updateBoard(laserList[j].retMat(), )
 					del(laserList[j])
+					bulletList[i].updateBoard(bulletList[i].retMat(), )
+					del(bulletList[i])
+					bulletCount -= 1
 					laserCount = laserCount - 1
+		except:
+			pass
+
+		try:
+			if (checkCollision(bulletList[i], enemy) == 1):
+				bulletList[i].updateBoard(bulletList[i].retMat(), )
+				globalobjects.enemylives -= 1
+				if (globalobjects.enemylives <= 0):
+					globalobjects.gameOver = True
+				del(bulletList[i])
+				bulletCount -= 1
 		except:
 			pass
 
@@ -220,6 +243,45 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 				mando.moveLeft(1)
 			elif magnet.retPos()[1] > mando.retPos()[1]:
 				mando.moveRight(1)
+
+	if globalobjects.timeleft <= 0:
+		if 'enemy' not in locals():
+			enemy = dragon(mando.retPos()[1] - 15, board._columns - 25)
+		
+		if (time.time() - lastSnowballTime >= 0.5):
+			snowballList.append(snowballs(enemy.retPos()[0] + 9, enemy.retPos()[1] - 4))
+			snowballList[snowballCount].updateBoard(snowballList[snowballCount].retMat(), flag = "put")
+			snowballCount = snowballCount + 1
+			lastSnowballTime = time.time()
+
+		for i in range(len(snowballList)):
+			try:
+				snowballList[i].moveLeft(1)
+			except:
+				pass
+
+			try:
+				if (checkCollision(snowballList[i], mando) == 1):
+					if (globalobjects.shieldActive == False):
+						globalobjects.lives -= 1
+					snowballList[i].updateBoard(snowballList[i].retMat(), )
+					del(snowballList[i])
+					snowballCount = snowballCount - 1
+			except:
+				pass
+
+			try:
+				if (snowballList[i].retPos()[1] < 4):
+					snowballList[i].updateBoard(snowballList[i].retMat(), )
+					del(snowballList[i])
+					snowballCount = snowballCount - 1
+			except:
+				pass
+
+
+		enemy.updateBoard(enemy.retMat() )
+		enemy.setX(mando.retPos()[0] - 8)
+		enemy.updateBoard(enemy.retMat(), flag="put")
 
 	text="x"
 	if kb.kbhit():

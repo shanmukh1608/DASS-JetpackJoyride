@@ -14,8 +14,9 @@ obj_scenery.create_ground(obj_Board)
 obj_scenery.create_sky(obj_Board)
 
 lives = 3
+enemylives = 3
 score = 0
-timeleft = 1
+timeleft = 15
 shieldAvailable = True
 shieldActive = False
 speedup = False

@@ -86,7 +86,33 @@ class mando(entity):
 		# else:
 			# self.moveDown(2)
 
-# class dragon(entity):
+class dragon(entity):
+	def __init__(self, x, y):
+		super().__init__(x, y)
+		self._mat = \
+		["\_|  \\      // | \_/",
+		"  \|\/|\_   //  /\/  ",
+		"   (oo)\ \_//  /     ",
+		"  //_/\_\/ /  |      ",
+		" @@/  |=\  \  |      ",
+		"      \_=\_ \ |      ",
+		"        \==\ \|\_    ",
+		"     __(\===\(  )\   ",
+		"    (((~) __(_/   |  ",
+		"         (((~) \  /  ",
+		"         ______/ /   ",
+		"         '------'    "]
+
+		self._width = 20
+		self._len = 11
+
+
+	def setX(self, x):
+		self._x = x
+		if (self._x <= 4):
+			self._x = 4
+		if ( x >= board._rows - 14):
+			x = board._rows - 14
 
 #         self._mat = \
 #    ["         .---.               ",
@@ -99,7 +125,7 @@ class mando(entity):
 #    "`.    ----.-=====,:========  ",
 #    " ~-.__/_:_(``/|              ",
 #    "    \__/======| /|           ",
-#    "    |\|\    /|/|             ",
+#    "    |\|\    /|/|             ",	
 #    "    |_   \__/   _|           ",
 #    "    |  `'|  |`'  |           ",
 #    "    |    |  |    |           "]

@@ -27,6 +27,13 @@ class bullets(entity):
 		self._width = 1
 		self._mat = [">>"]
 
+class snowballs(entity):
+	def __init__(self, x, y):
+		super().__init__(x, y)
+		self._len = 0
+		self._width = 2
+		self._mat = ["@@"]
+
 class lasers(entity):
 	def __init__(self, x, y):
 		super().__init__(x, y)
