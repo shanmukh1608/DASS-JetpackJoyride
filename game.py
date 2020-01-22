@@ -8,7 +8,7 @@ import cursor
 
 from characters import mando
 from entity import point
-from objects import coins, lasers, speedup
+from objects import coins, lasers, bullets, speedup
 import globalobjects
 from globalobjects import obj_Board as board
 
@@ -49,6 +49,9 @@ laserCount = 0
 powerUpList = []
 powerUpCount = 0
 
+bulletList = []
+bulletCount = 0
+
 mando = mando(board._rows-7, 1)
 kb = hack.KBHit()
 
@@ -84,7 +87,7 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 		lastCoinTime = time.time()
 
 	if (time.time() - lastLaserTime > 2):
-		laserList.append(lasers(random.randint(3, board._rows - 7), board._columns - 6))
+		laserList.append(lasers(random.randint(3, board._rows - 8), board._columns - 7))
 		laserList[laserCount].updateBoard(laserList[laserCount].retMat(), flag="put")
 		laserCount = laserCount + 1
 		lastLaserTime = time.time()
@@ -94,6 +97,30 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 		powerUpList[powerUpCount].updateBoard(powerUpList[powerUpCount].retMat(), flag="put")
 		powerUpCount = powerUpCount + 1
 		lastPowerUpTime = time.time()
+
+	for i in range(len(bulletList)):
+		try:
+			if (tick % 2 == 0):
+				bulletList[i].moveRight(1 if globalobjects.speedup == False else 2)
+		except:
+			pass
+
+		try:
+			for j in range(len(laserList)):
+				if (checkCollision(laserList[j], bulletList[i]) == 1):
+					laserList[j].updateBoard(laserList[j].retMat(), )
+					del(laserList[j])
+					laserCount = laserCount - 1
+		except:
+			pass
+
+		try:
+			if (bulletList[i].retPos()[1] > board._columns - 5):
+				bulletList[i].updateBoard(bulletList[i].retMat(), )
+				del(bulletList[i])
+				bulletCount = bulletCount - 1
+		except:
+			pass
 
 	for i in range(len(coinsList)):
 
@@ -171,7 +198,7 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 		except:
 			pass
 		
-	text="f"
+	text="x"
 	if kb.kbhit():
 		text = kb.getch()
 	
@@ -187,6 +214,11 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 			globalobjects.shieldActive = True
 			globalobjects.shieldAvailable = False
 			lastShieldTime = time.time()
+	if text == "f":
+		bulletList.append(bullets(mando.retPos()[0]+2, mando.retPos()[1]+7))
+		bulletList[bulletCount].updateBoard(bulletList[bulletCount].retMat(), flag="put")
+		bulletCount = bulletCount + 1
+
 	if text == "q":
 		globalobjects.gameOver = True
 

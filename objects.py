@@ -8,23 +8,30 @@ class coins(entity):
 		self._width = 0
 		self._mat = ["©"]
 
+class bullets(entity):
+	def __init__(self, x, y):
+		super().__init__(x, y)
+		self._len = 0
+		self._width = 1
+		self._mat = [">>"]
+
 class lasers(entity):
 	def __init__(self, x, y):
 		super().__init__(x, y)
 		self._orientation = random.randint(0, 2)
 
 		if (self._orientation == 0):
-			self._mat = ['|', '|', '|', '|']
-			self._len = 3
+			self._mat = ['|', '|', '|', '|', '|']
+			self._len = 4
 			self._width = 0
 		elif (self._orientation == 1):
-			self._mat = ['----']
+			self._mat = ['-------']
 			self._len = 0
-			self._width = 3
+			self._width = 6
 		else:
-			self._mat = ['\\', ' \\', '  \\', '   \\']
-			self._len = 3
-			self._width = 4
+			self._mat = ['\\', ' \\', '  \\', '   \\', '    \\']
+			self._len = 4
+			self._width = 5
 
 class speedup(entity):
 	def __init__(self, x, y):
