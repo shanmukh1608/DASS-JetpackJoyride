@@ -1,4 +1,5 @@
 import signal
+import shutil
 import os
 import subprocess
 import time
@@ -6,7 +7,7 @@ import readInput as hack
 import random   
 import cursor
 
-from characters import mando, dragon
+from characters import mando, dragon, babyyoda
 from entity import point
 from objects import coins, lasers, bullets, speedup, magnets, snowballs
 import globalobjects
@@ -61,10 +62,30 @@ magnetCreated = False
 
 mando = mando(board._rows-7, 1)
 kb = hack.KBHit()
+columns = shutil.get_terminal_size().columns
+
+print("\n"*23)
+yoda = babyyoda(0, 0)
+
+print("WELCOME TO JETPACK JOYRIDE!".center(columns))
+print("Use WASD to move".center(columns))
+print("Press F to shoot bullets".center(columns))
+print("Press spacebar to activate shield".center(columns))
+print("Your character has 3 lives".center(columns))
+print("Beat the boss to win and rescue Baby Yoda!".center(columns))
+print()
+print("PRESS e TO START GAME".center(columns))
+for i in yoda.retInitialMat():
+	print(i)
+text = "a"
+while text != "e":
+	if kb.kbhit():
+		text = kb.getch()
+
 
 while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 	
-	globalobjects.timeleft = int(90 - time.time() + startTime)
+	globalobjects.timeleft = int(3 - time.time() + startTime)
 	
 	if (mando.retPos()[0] == board._rows - 7): # if touches ground
 		globalobjects.g_timer = time.time()
@@ -95,7 +116,7 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 		globalobjects.g_timer = time.time()
 
 	if globalobjects.timeleft > 0:	
-		if (time.time() - lastCoinTime > 2):
+		if (time.time() - lastCoinTime > 1):
 			coinsList.append(coins(random.randint(3, board._rows - 4), board._columns - 3))
 			coinsList[coinCount].updateBoard(coinsList[coinCount].retMat(), flag="put")
 			coinCount = coinCount + 1
@@ -311,3 +332,11 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 	board.printboard()
 
 	tick = tick + 1
+
+os.system('clear')
+if globalobjects.lives > 0:
+	for i in yoda.retMat():
+		print(i)
+else:
+	for i in yoda.retLosingMat():
+		print(i)
