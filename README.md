@@ -7,13 +7,13 @@ Jetpack Joyride - DASS Assignment 1 (Spring '20)
 
 **To play:-**
 
-        A - Left
+	A - Left
 
-        W - Jump
+	W - Jump
 
-        D - Right
+	D - Right
 
-        Spacebar - Activate Shield
+	Spacebar - Activate Shield
 
 	F - Fire bullet
 
