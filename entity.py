@@ -41,7 +41,7 @@ class entity():
             self.updateBoard(self._mat, "put")
 
     def moveRight(self, y):
-        if (self._y + y < board._columns):
+        if (self._y + y < board._columns - 4):
             self.updateBoard(self._mat, )
             self._y = self._y + y
             self.updateBoard(self._mat, "put")

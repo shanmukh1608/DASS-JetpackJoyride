@@ -65,7 +65,7 @@ class mando(entity):
 				self.updateBoard(self._shieldMat, "put")
 
 	def moveRight(self, y):
-		if (self._y + y > 0 and self._y + y < board._columns):
+		if (self._y + y > 0 and self._y + y < board._columns - 8):
 			if globalobjects.shieldActive == False:
 				self.updateBoard(self._mat, )
 				self._y = self._y + y

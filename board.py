@@ -1,4 +1,8 @@
 import subprocess
+import colorama
+import colors
+from colors import *
+from colorama import Fore, Back, Style
 
 def pos(x, y):
 	return '\x1b[%d;%dH' % (y, x)
@@ -22,6 +26,25 @@ class board:
 	def printboard(self):
 		for i in range(self._rows):
 			for j in range(self._columns):
-				print('%s%s' % (pos(j, i), self._matrix[i][j]), end='')
-				# print(self._matrix[i][j], end='')
+				if i<3:
+					print('%s%s%s%s' % (pos(j, i), Back.BLUE,Fore.BLACK, self._matrix[i][j]), end='')
+				elif i == self._rows - 1:
+					print('%s%s%s%s' % (pos(j, i), Back.RED,Fore.BLACK, self._matrix[i][j]), end='')
+				elif i == self._rows - 2:
+					print('%s%s%s%s' % (pos(j, i), Back.GREEN,Fore.BLACK, self._matrix[i][j]), end='')
+				elif self._matrix[i][j] == ">":
+					print('%s%s%s%s' % (pos(j, i), Back.BLACK,Fore.RED, self._matrix[i][j]), end='')
+				elif self._matrix[i][j] == "©":
+					print('%s%s%s%s' % (pos(j, i), Back.BLACK,Fore.YELLOW, self._matrix[i][j]), end='')
+				elif self._matrix[i][j] == "P":
+					print('%s%s%s%s' % (pos(j, i), Back.BLACK,Fore.BLUE, self._matrix[i][j]), end='')
+				elif self._matrix[i][j] == "O":
+					print('%s%s%s%s' % (pos(j, i), Back.BLACK,Fore.RED, self._matrix[i][j]), end='')
+				elif self._matrix[i][j] == "@":
+					print('%s%s%s%s%s' % (pos(j, i), Back.BLACK,Fore.WHITE,Style.BRIGHT, self._matrix[i][j]), end='')
+				else:
+					print('%s%s%s%s' % (pos(j, i), Back.BLACK,Fore.WHITE, self._matrix[i][j]), end='')
+
+					# print('%s%s' % (pos(j, i), self._matrix[i][j]), end='')
+					
 			print("")

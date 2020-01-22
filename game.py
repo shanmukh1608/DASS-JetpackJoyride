@@ -6,6 +6,8 @@ import time
 import readInput as hack
 import random   
 import cursor
+import colorama
+from colorama import Fore, Back, Style 
 
 from characters import mando, dragon, babyyoda
 from entity import point
@@ -84,8 +86,7 @@ while text != "e":
 
 
 while (globalobjects.lives > 0 and globalobjects.gameOver == False):
-	
-	globalobjects.timeleft = int(3 - time.time() + startTime)
+	globalobjects.timeleft = int(90 - time.time() + startTime)
 	
 	if (mando.retPos()[0] == board._rows - 7): # if touches ground
 		globalobjects.g_timer = time.time()
@@ -159,6 +160,7 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 					del(bulletList[i])
 					bulletCount -= 1
 					laserCount = laserCount - 1
+					globalobjects.score += 1
 		except:
 			pass
 
