@@ -35,6 +35,7 @@ lastCoinTime = time.time()
 lastLaserTime = time.time()
 lastPowerUpTime = time.time() #last time of collection
 lastSpeedUpTime = time.time() #last time of activation
+lastShieldTime = time.time()
 
 g_timer = 0
 tick = 0
@@ -52,11 +53,24 @@ mando = mando(board._rows-7, 1)
 kb = hack.KBHit()
 
 
-while (globalobjects.lives > 0 and globalobjects.gameOver == True):
-	mando.updateBoard(mando._mat, flag="put")
+while (globalobjects.lives > 0 and globalobjects.gameOver == False):
+
+	if (globalobjects.shieldActive == True):
+		mando.updateBoard(mando._shieldMat, flag="put")
+		# mando._width = 6
+	else:
+		mando.updateBoard(mando._mat, flag="put")
 
 	mando.gravity()
 
+
+	if (time.time() - lastShieldTime >= 10):
+		globalobjects.shieldActive = False
+		# mando._width = 4
+
+	if (time.time() - lastShieldTime >= 20):
+		globalobjects.shieldAvailable = True
+	
 	if (time.time() - lastSpeedUpTime >= 10):
 		globalobjects.speedup = False
 
@@ -116,7 +130,8 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == True):
 
 		try:
 			if (checkCollision(laserList[i], mando) == 1):
-				globalobjects.lives = globalobjects.lives - 1
+				if (globalobjects.shieldActive == False):
+					globalobjects.lives = globalobjects.lives - 1
 				laserList[i].updateBoard(laserList[i].retMat(), )
 				del(laserList[i])
 				laserCount = laserCount - 1
@@ -167,6 +182,13 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == True):
 		mando.moveRight(1 if globalobjects.speedup == False else 2)
 	if text == "a":
 		mando.moveLeft(1 if globalobjects.speedup == False else 2)
+	if text == " ":
+		if globalobjects.shieldAvailable is True:
+			globalobjects.shieldActive = True
+			globalobjects.shieldAvailable = False
+			lastShieldTime = time.time()
+	if text == "q":
+		globalobjects.gameOver = True
 
 	board.printboard()
 
