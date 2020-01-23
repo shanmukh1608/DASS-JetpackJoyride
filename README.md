@@ -3,21 +3,21 @@ Jetpack Joyride - DASS Assignment 1 (Spring '20)
 
 **To run the code:-**
 
-		python3 game.py
+	python3 game.py
 
 **To play:-**
 
-        A - Left
+	A - Left
 
-        W - Jump
+	W - Jump
 
-        D - Right
+	D - Right
 
-        Spacebar - Activate Shield
+	Spacebar - Activate Shield
 
-		F - Fire bullet
+	F - Fire bullet
 
-		q - Quit
+	q - Quit
 
 **Additional Features Implemented:-**
 
