@@ -15,6 +15,9 @@ from objects import coins, lasers, bullets, speedup, magnets, snowballs
 import globalobjects
 from globalobjects import obj_Board as board
 
+def pos(x, y):
+	return '\x1b[%d;%dH' % (y, x)
+
 os.system('clear')
 cursor.hide()
 
@@ -98,7 +101,7 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 	else:
 		mando.updateBoard(mando._mat, flag="put")
 
-	if (time.time() - startTime >= random.randint(10, 15)):
+	if (time.time() - startTime >= random.randint(30, 60)):
 		if (magnetCreated is False):
 			magnet = magnets(25, board._columns - 10)
 			magnet.updateBoard(magnet.retMat(), flag="put")
@@ -335,7 +338,12 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 
 	tick = tick + 1
 
+
+for i in range(board._rows):
+	for j in range(board._columns):
+			print('%s%s%s%s' % (pos(j, i), Back.RESET,Fore.RESET, " "), end='')
 os.system('clear')
+
 if globalobjects.lives > 0:
 	for i in yoda.retMat():
 		print(i)
