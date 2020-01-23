@@ -168,6 +168,14 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 			pass
 
 		try:
+			if (bulletList[i].retPos()[1] > board._columns - 7):
+				bulletList[i].updateBoard(bulletList[i].retMat(), )
+				del(bulletList[i])
+				bulletCount = bulletCount - 1
+		except:
+			pass
+
+		try:
 			if (checkCollision(bulletList[i], enemy) == 1):
 				bulletList[i].updateBoard(bulletList[i].retMat(), )
 				globalobjects.enemylives -= 1
@@ -178,13 +186,7 @@ while (globalobjects.lives > 0 and globalobjects.gameOver == False):
 		except:
 			pass
 
-		try:
-			if (bulletList[i].retPos()[1] > board._columns - 5):
-				bulletList[i].updateBoard(bulletList[i].retMat(), )
-				del(bulletList[i])
-				bulletCount = bulletCount - 1
-		except:
-			pass
+		
 
 	for i in range(len(coinsList)):
 
