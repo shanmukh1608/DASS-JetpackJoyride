@@ -2,7 +2,7 @@
 
 ## Introduction
 
-An arcade game in Python3 (terminal-based), heavily inspired by Jetpack Joyride where the user controls the <andalorian, and can move it up, forward, and backward, while collecting coins and fighting/dodging its enemies on the way.
+An arcade game in Python3 (terminal-based), heavily inspired by Jetpack Joyride where the user controls the Mandalorian, and can move it up, forward, and backward, while collecting coins and fighting/dodging its enemies on the way.
 
 ## Rules of the Game
 - You control Mandalorian throughout his efforts (to save Yoda) by avoiding/ killing enemy beams, collecting points, and dodging magnets.
